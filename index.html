@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<!------------------------------------------------------------------->
+<!------------------------------------------------------------------->
+
+<head>
+  <meta charset="UTF-8">
+  <title>Prévisionnel Livraison RFS</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+
+<!------------------------------------------------------------------->
+<!------------------------------------------------------------------->
+
+<body>
+
+<!---------------------------------------------------------------------->
+<!------------------------------Titre page------------------------------>
+<!---------------------------------------------------------------------->
+
+<div id="header">
+  <img src="logo.png" alt="Logo" id="logo">
+  <h1>Prévisionnel Livraison RFS</h1>
+</div>
+
+<div id="secondeLigne"></div>
+
+<!------------------------------------------------------------------------------>
+<!--------------------------------CONTENU GLOBAL-------------------------------->
+<!------------------------------------------------------------------------------>
+
+<div id = "contenu">
+  <!---------------------------------------------------------------------->
+  <!---------------------------Ligne rechercher--------------------------->
+  <!---------------------------------------------------------------------->
+  
+  <div id ="ligneRecherche">
+      <p>Rechercher :</p>
+      <div id="RechRFS">
+          <label>
+          N° RFS
+          <input type="text" id="inputRFS" list="RFSList" autocomplete="off">
+          <datalist id="RFSList"></datalist>
+          </label>
+      </div>
+      
+      <div id="RechStatut">
+          <label>
+          Statut RFS
+          <input type="text" id="inputStatut" list="StatutList" autocomplete="off">
+          <datalist id="StatutList"></datalist>
+          </label>
+      </div>
+      
+      <div id="RechSemaineLivrTh">
+          <label>
+          Semaine de livraison théorique
+          <input type="text" id="inputSemaineLivrTh" list="SemaineLivrThList" autocomplete="off">
+          <datalist id="SemaineLivrThList"></datalist>
+          </label>
+      </div>
+
+      <div id="RechSemaineDelaiMaintenance">
+          <label>
+          Semaine délai maintenance
+          <input type="text" id="inputSemaineDelaiMaintenance" list="SemaineDelaiMaintenanceList" autocomplete="off">
+          <datalist id="SemaineDelaiMaintenanceList"></datalist>
+          </label>
+      </div>
+
+      <div id="RechFournisseur">
+          <label>
+          Fournisseur
+          <input type="text" id="inputFournisseur" list="FournisseurList" autocomplete="off">
+          <datalist id="FournisseurList"></datalist>
+          </label>
+      </div>
+      
+      
+      <input type="button" id="btnValider" value="Valider">      
+      <input type="button" id="btnEffacer" value="Effacer">
+      
+      
+  </div>
+  
+  <!--------------------------------------------------------------------->
+  <!----------------------------Ligne Tableau---------------------------->
+  <!--------------------------------------------------------------------->
+  <div id="tableauWrapper">
+  <table id="Tableau" border="1" >
+      <thead>
+        <tr>
+          <th>RFS</th>
+          <th>N° panier</th>
+          <th>Date création panier</th>
+          <th>N° commande</th>
+          <th>Date commande</th>
+          <th>Livraison théorique</th>
+          <th>Livraison réelle</th>
+          <th>Délai maintenance</th>
+          <th>Fournisseur</th>
+          <th>N° famille</th>
+          <th>Quantité</th>
+        </tr>
+      </thead>
+      <tbody id="resultsTableau">
+        <!-- Les lignes seront ajoutées dynamiquement par JS -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!------Liaison à JS à la fin parce que sinon JS connaitra pas toutes les variables------>
+
+<script src="script.js"></script>
+</body>
+
+
+
+</html>
