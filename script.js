@@ -323,7 +323,8 @@ chargerDonnees().then(() => {
 
 
         if (cle === "fournisseur") {
-          const valeurLigneFournisseur = row[correspondance[cle]] || "";
+          const groupeFournisseur = selectGrpFournisseur(row);
+          const valeurLigneFournisseur = row[`Fournisseur [${groupeFournisseur}]`] || "";
           return valeurLigneFournisseur.includes(val) ;
         }
         
