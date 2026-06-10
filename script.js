@@ -29,7 +29,7 @@ async function chargerDonnees() {
       return obj;
     }).filter(row => {
       const statut = row["Statut de la RFS"] || "";
-      return statut !== "CLOTURÉE" && statut !== "ANNULÉE";
+      return statut !== "CLOTURÉE" && statut !== "ANNULÉE" && statut!== "REFUSÉE";
     });
     
     console.log(Object.keys(data_RFS[0]))
@@ -55,6 +55,22 @@ chargerDonnees().then(() => {
       const option = document.createElement("option");
       option.value = RFS;
       RFSDatalist.appendChild(option);
+    });
+
+    // Date RFS
+    const DateRFS_disp = [...new Set(lignesFiltrees.map(item => {
+      return getSemaineISOAvecAnnee(item["Date de la demande"]);
+    }))].filter(m => m).sort((a, b) => {
+      const [sA, yA] = a.split("-").map(Number);
+      const [sB, yB] = b.split("-").map(Number);
+      return yA !== yB ? yA - yB : sA - sB;
+    });
+    const DateRFSDatalist = document.getElementById("DateRFSList");
+    DateRFSDatalist.innerHTML = "";
+    DateRFS_disp.forEach(s => {
+      const option = document.createElement("option");
+      option.value = s;
+      DateRFSDatalist.appendChild(option);
     });
 
     // Statuts
@@ -122,6 +138,7 @@ chargerDonnees().then(() => {
 
   // On récupère les éléments HTML par leur ID
   const inputRFS = document.getElementById("inputRFS");
+  const inputDateRFS = document.getElementById("inputDateRFS");
   const inputStatut = document.getElementById("inputStatut");
   const inputSemaineLivrTh = document.getElementById("inputSemaineLivrTh");
   const inputSemaineDelaiMaintenance = document.getElementById("inputSemaineDelaiMaintenance");
@@ -137,6 +154,7 @@ chargerDonnees().then(() => {
   
   btnEffacer.onclick = function () {
     inputRFS.value = "";
+    inputDateRFS.value = "";
     inputStatut.value = "";
     inputSemaineLivrTh.value = "";
     inputSemaineDelaiMaintenance.value = "";
@@ -153,7 +171,7 @@ chargerDonnees().then(() => {
 
 
   // Deuxième condition du lancement de remplissage de tableau avec touche entrer
-  [inputRFS, inputStatut, inputSemaineLivrTh, inputSemaineDelaiMaintenance, inputfournisseur].forEach(input => {
+  [inputRFS, inputDateRFS, inputStatut, inputSemaineLivrTh, inputSemaineDelaiMaintenance, inputfournisseur].forEach(input => {
     input.addEventListener("keydown", function (e) {if (e.key === "Enter") {lancerRemplissage();}
     });
   });
@@ -252,6 +270,7 @@ chargerDonnees().then(() => {
 
     const valeursRenseignees = {
         RFS:                        inputRFS.value.trim().toUpperCase(),
+        DateRFS:                    inputDateRFS.value.trim().toUpperCase(),
         Statut:                     inputStatut.value.trim().toUpperCase(),
         SemaineLivrTh:              inputSemaineLivrTh.value.trim().toUpperCase(),
         SemaineDelaiMaintenance:    inputSemaineDelaiMaintenance.value.trim().toUpperCase(),
@@ -261,6 +280,7 @@ chargerDonnees().then(() => {
     // Correspondance entre les clés et les colonnes du JSON
     const correspondance = {
         RFS:                        "Numéro de la RFS",
+        DateRFS:                    "Date de la demande",
         Statut:                     "Statut de la RFS",
         SemaineLivrTh:              "Livraison théorique (fournisseur) [a]",
         SemaineDelaiMaintenance:    "Délai estimé maintenance [a]",
@@ -274,6 +294,12 @@ chargerDonnees().then(() => {
         if (cle === "RFS") {
           const valeurLigneRFS = row[correspondance[cle]] || "";
           return valeurLigneRFS.includes(val);
+        }
+
+        if (cle === "DateRFS") {
+          const val_ligne = row["Date de la demande"] || "";
+          const semaine = getSemaineISOAvecAnnee(val_ligne);
+          return semaine !== null && String(semaine) === val;
         }
 
         if (cle === "Statut") {
@@ -308,10 +334,8 @@ chargerDonnees().then(() => {
     mettreAJourDatalist(lignesFiltrees);
 
     lignesFiltrees.sort((a, b) => {
-      const gA = selectGrpPanier(a);
-      const gB = selectGrpPanier(b);
-      const dateA = Number(a[`Date création panier [${gA}]`]) || 0;
-      const dateB = Number(b[`Date création panier [${gB}]`]) || 0;
+      const dateA = Number(a["Date de la demande"]) || 0;
+      const dateB = Number(b["Date de la demande"]) || 0;
 
       if (!dateA && !dateB) return 0;
       if (!dateA) return 1;  // a sans date → en bas
@@ -328,6 +352,7 @@ chargerDonnees().then(() => {
         
         tr.innerHTML = `
             <td>${row["Numéro de la RFS"] || ""}</td>
+            <td>${excelDateHeureVersDate(row["Date de la demande"]) || ""}</td>
             <td>${row[`N°panier/DA [${groupePanier}]`] || ""}</td>
             <td>${excelDateHeureVersDate(row[`Date création panier [${groupePanier}]`]) || ""}</td>
             <td>${row[`N°commande [${groupePanier}]`] || ""}</td>
