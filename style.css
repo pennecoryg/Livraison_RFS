@@ -66,6 +66,7 @@ p {
 }
 
 #RechRFS, 
+#RechDateRFS,
 #RechStatut,
 #RechSemaineLivrTh,
 #RechSemaineDelaiMaintenance,
@@ -77,13 +78,15 @@ p {
 }
 
 #RechRFS label { color: #009EFF; font-weight: bold; }
-#RechStatut label { color: #00EC00; font-weight: bold; }
+#RechDateRFS { color: #00EC00; font-weight: bold; }
+#RechStatut label { color: #FFDA00; font-weight: bold; } 
 #RechSemaineLivrTh label  { color: #FF785A; font-weight: bold; }    
-#RechSemaineDelaiMaintenance label  { color: #FFDA00; font-weight: bold; }   
+#RechSemaineDelaiMaintenance label   { color: #FF3E61; font-weight: bold; }  
 #RechFournisseur label   {color: #A1A1A1; font-weight: bold;}
 
 
 #inputRFS, 
+#inputDateRFS,
 #inputStatut,
 #inputSemaineLivrTh,
 #inputSemaineDelaiMaintenance,
