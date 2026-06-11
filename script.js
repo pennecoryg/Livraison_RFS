@@ -42,7 +42,12 @@ async function chargerDonnees() {
       return obj;
     }).filter(row => {
       const statut = row["Statut de la RFS"] || "";
-      return statut !== "CLOTURÉE" && statut !== "ANNULÉE" && statut!== "REFUSÉE";
+      const pilote = row["Pris en charge (maintenance)"] || "";
+
+      const statutOK = statut !== "CLOTURÉE" && statut !== "ANNULÉE" && statut !== "REFUSÉE";
+      const piloteOK = pilote !== "Frederic Blandel" && pilote !== "Mickael Monnier" && pilote !== "SALLE, Michaël";
+
+      return statutOK && piloteOK;
     });
     
     console.log(Object.keys(data_RFS[0]))
@@ -385,6 +390,7 @@ chargerDonnees().then(() => {
         
         tr.innerHTML = `
             <td>${row["Numéro de la RFS"] || ""}</td>
+            <td>${row["Pris en charge (maintenance)"] || ""}</td>
             <td>${excelDateHeureVersDate(row["Date de la demande"]) || ""}</td>
             <td>${row[`N°panier/DA [${groupePanier}]`] || ""}</td>
             <td>${excelDateHeureVersDate(row[`Date création panier [${groupePanier}]`]) || ""}</td>
@@ -393,8 +399,7 @@ chargerDonnees().then(() => {
             <td>${excelDateHeureVersDate(row[`Livraison théorique (fournisseur) [${groupeLivraison}]`])|| ""}</td>
             <td>${excelDateHeureVersDate(row[`Date livraison réelle (fournisseur) [${groupeLivraison}]`])|| ""}</td>
             <td>${excelDateHeureVersDate(row[`Délai estimé maintenance [${groupeLivraison}]`])|| ""}</td>
-            <td>${row[`Fournisseur [${groupeFournisseur}]`] || ""}</td>
-            <td>${row["Pris en charge (maintenance)"] || ""}</td>
+            <td>${row[`Fournisseur [${groupeFournisseur}]`] || ""}</td>  
             <td>${row["N°famille [a]"] || ""}</td>
             <td>${row["Quantité [a]"] || ""}</td>
         `;
