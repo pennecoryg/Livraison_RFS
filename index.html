@@ -45,6 +45,15 @@
           <datalist id="RFSList"></datalist>
           </label>
       </div>
+
+      <div id="RechPilote">
+          <label>
+          Pilote orygamy
+          <input type="text" id="inputPilote" list="PiloteList" autocomplete="off">
+          <datalist id="PiloteList"></datalist>
+          </label>
+      </div>
+
       <div id="RechDateRFS">
           <label>
           Date RFS
@@ -84,13 +93,7 @@
           </label>
       </div>
 
-      <div id="RechPilote">
-          <label>
-          Pilote orygamy
-          <input type="text" id="inputPilote" list="PiloteList" autocomplete="off">
-          <datalist id="PiloteList"></datalist>
-          </label>
-      </div>
+      
       
       
       <input type="button" id="btnValider" value="Valider">      
@@ -107,6 +110,7 @@
       <thead>
         <tr>
           <th>RFS</th>
+          <th>Pilote orygamy</th>
           <th>Date RFS</th>
           <th>N° panier</th>
           <th>Date création panier</th>
@@ -115,8 +119,7 @@
           <th>Livraison théorique</th>
           <th>Livraison réelle</th>
           <th>Délai maintenance</th>
-          <th>Fournisseur</th>
-          <th>Pilote orygamy</th>
+          <th>Fournisseur</th> 
           <th>N° famille</th>
           <th>Quantité</th>
         </tr>
