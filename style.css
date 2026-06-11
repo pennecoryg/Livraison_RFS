@@ -79,12 +79,13 @@ p {
 }
 
 #RechRFS label { color: #009EFF; font-weight: bold; }
-#RechDateRFS { color: #00EC00; font-weight: bold; }
-#RechStatut label { color: #FFDA00; font-weight: bold; } 
-#RechSemaineLivrTh label  { color: #FF785A; font-weight: bold; }    
-#RechSemaineDelaiMaintenance label   { color: #FF3E61; font-weight: bold; }  
-#RechFournisseur label   {color: #A1A1A1; font-weight: bold;}
-#RechPilote label { color: #009EFF; font-weight: bold; }
+#RechPilote label{ color: #00EC00; font-weight: bold; }
+#RechDateRFS label { color: #FFDA00; font-weight: bold; } 
+#RechStatut label { color: #FF785A; font-weight: bold; } 
+#RechSemaineLivrTh label  { color: #FF3E61; font-weight: bold; }     
+#RechSemaineDelaiMaintenance label   {color: #A1A1A1; font-weight: bold;}
+#RechFournisseur label  { color: #009EFF; font-weight: bold; } 
+ 
 
 
 #inputRFS, 
