@@ -70,7 +70,8 @@ p {
 #RechStatut,
 #RechSemaineLivrTh,
 #RechSemaineDelaiMaintenance,
-#RechFournisseur {
+#RechFournisseur,
+#RechPilote {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,6 +84,7 @@ p {
 #RechSemaineLivrTh label  { color: #FF785A; font-weight: bold; }    
 #RechSemaineDelaiMaintenance label   { color: #FF3E61; font-weight: bold; }  
 #RechFournisseur label   {color: #A1A1A1; font-weight: bold;}
+#RechPilote label { color: #009EFF; font-weight: bold; }
 
 
 #inputRFS, 
@@ -90,7 +92,8 @@ p {
 #inputStatut,
 #inputSemaineLivrTh,
 #inputSemaineDelaiMaintenance,
-#inputFournisseur {
+#inputFournisseur,
+#inputPilote {
   border-radius: 5px;
   border: 2px solid #C3C3C3;
   background-color: #E6E6E6;
