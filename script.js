@@ -11,7 +11,7 @@ async function chargerDonnees() {
     const data = await response.json();
     console.log(data); 
     
-
+    const colonnesMinuscules = ["Pris en charge (maintenance)"];
     data_RFS = data.RFS.map(row => {
       let obj = {};
       
@@ -20,11 +20,24 @@ async function chargerDonnees() {
         
         let valeur = String(row[key] || "")
           .replace(/\r/g, "")
-          .trim()
-          .toUpperCase();
+          .trim();
 
+        if (!colonnesMinuscules.includes(key)) {
+          valeur = valeur.toUpperCase();
+        }
         obj[cleanKey] = valeur;
       });
+
+      
+      // Transformation du format pilote : prenom.nom@airbus.com ou prenom.nom.external@airbus.com → Prenom Nom
+      const pilote = obj["Pris en charge (maintenance)"] || "";
+      const regexPilote = /^([a-zA-ZÀ-ÿ-]+)\.([a-zA-ZÀ-ÿ-]+)(\.external)?@airbus\.com$/i;
+      const match = pilote.match(regexPilote);
+      if (match) {
+        const prenom = match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+        const nom = match[2].charAt(0).toUpperCase() + match[2].slice(1).toLowerCase();
+        obj["Pris en charge (maintenance)"] = `${prenom} ${nom}`;
+      }
 
       return obj;
     }).filter(row => {
@@ -129,6 +142,16 @@ chargerDonnees().then(() => {
       option.value = f;
       FournisseurDatalist.appendChild(option);
     });
+
+    // Pilote
+    const Pilote_disp = [...new Set(lignesFiltrees.map(item => item["Pris en charge (maintenance)"]))].filter(m => m).sort();
+    const PiloteDatalist = document.getElementById("PiloteList");
+    PiloteDatalist.innerHTML = "";
+    Pilote_disp.forEach(RFS => {
+      const option = document.createElement("option");
+      option.value = RFS;
+      PiloteDatalist.appendChild(option);
+    });
   }
 
 
@@ -143,6 +166,7 @@ chargerDonnees().then(() => {
   const inputSemaineLivrTh = document.getElementById("inputSemaineLivrTh");
   const inputSemaineDelaiMaintenance = document.getElementById("inputSemaineDelaiMaintenance");
   const inputfournisseur = document.getElementById("inputFournisseur");
+  const inputPilote = document.getElementById("inputPilote");
   const btnValider = document.getElementById("btnValider");
   const btnEffacer = document.getElementById("btnEffacer");
 
@@ -159,6 +183,7 @@ chargerDonnees().then(() => {
     inputSemaineLivrTh.value = "";
     inputSemaineDelaiMaintenance.value = "";
     inputfournisseur.value = "";
+    inputPilote.value = "";
     remplirTableau();
     }
 
@@ -171,7 +196,7 @@ chargerDonnees().then(() => {
 
 
   // Deuxième condition du lancement de remplissage de tableau avec touche entrer
-  [inputRFS, inputDateRFS, inputStatut, inputSemaineLivrTh, inputSemaineDelaiMaintenance, inputfournisseur].forEach(input => {
+  [inputRFS, inputDateRFS, inputStatut, inputSemaineLivrTh, inputSemaineDelaiMaintenance, inputfournisseur, inputPilote].forEach(input => {
     input.addEventListener("keydown", function (e) {if (e.key === "Enter") {lancerRemplissage();}
     });
   });
@@ -275,6 +300,7 @@ chargerDonnees().then(() => {
         SemaineLivrTh:              inputSemaineLivrTh.value.trim().toUpperCase(),
         SemaineDelaiMaintenance:    inputSemaineDelaiMaintenance.value.trim().toUpperCase(),
         fournisseur:                inputfournisseur.value.trim().toUpperCase(),
+        Pilote:                     inputPilote.value.trim().toUpperCase(),
     };
 
     // Correspondance entre les clés et les colonnes du JSON
@@ -285,6 +311,7 @@ chargerDonnees().then(() => {
         SemaineLivrTh:              "Livraison théorique (fournisseur) [a]",
         SemaineDelaiMaintenance:    "Délai estimé maintenance [a]",
         fournisseur:                "Fournisseur [a]",
+        Pilote:                     "Pris en charge (maintenance)",
         };
 
     // Filtrage
@@ -327,6 +354,11 @@ chargerDonnees().then(() => {
           const valeurLigneFournisseur = row[`Fournisseur [${groupeFournisseur}]`] || "";
           return valeurLigneFournisseur.includes(val) ;
         }
+
+        if (cle === "Pilote") {
+          const valeurLignePilote = row[correspondance[cle]] || "";
+          return valeurLignePilote.includes(val);
+        }
         
         return row[correspondance[cle]]?.includes(val);
         });
@@ -362,6 +394,7 @@ chargerDonnees().then(() => {
             <td>${excelDateHeureVersDate(row[`Date livraison réelle (fournisseur) [${groupeLivraison}]`])|| ""}</td>
             <td>${excelDateHeureVersDate(row[`Délai estimé maintenance [${groupeLivraison}]`])|| ""}</td>
             <td>${row[`Fournisseur [${groupeFournisseur}]`] || ""}</td>
+            <td>${row["Pris en charge (maintenance)"] || ""}</td>
             <td>${row["N°famille [a]"] || ""}</td>
             <td>${row["Quantité [a]"] || ""}</td>
         `;
