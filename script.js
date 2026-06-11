@@ -356,7 +356,7 @@ chargerDonnees().then(() => {
         }
 
         if (cle === "Pilote") {
-          const valeurLignePilote = row[correspondance[cle]] || "";
+          const valeurLignePilote = (row[correspondance[cle]] || "").toUpperCase();
           return valeurLignePilote.includes(val);
         }
         
